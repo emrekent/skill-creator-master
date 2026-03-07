@@ -15,7 +15,7 @@ Create production-grade AI agent skills. Battle-tested framework with init scrip
 3. INIT       → Run scripts/init_skill.sh to generate structure
 4. BUILD      → Write SKILL.md + bundled resources
 5. VALIDATE   → Run scripts/validate_skill.sh to check quality
-6. PUBLISH    → Push to GitHub, verify on skills.sh
+6. PUBLISH    → Push to GitHub, verify CLI discovery, then verify on skills.sh
 ```
 
 ## Step 1: Understand with Concrete Examples
@@ -156,7 +156,7 @@ Checks:
 - YAML frontmatter has name and description
 - SKILL.md under 500 lines
 - No unfinished placeholders remaining
-- No forbidden files (README, CHANGELOG, etc.)
+- Auxiliary files flagged for review (README, CHANGELOG, etc.)
 - All referenced files exist (no phantom references)
 - Description includes trigger keywords
 - Skill name matches folder name
@@ -166,9 +166,22 @@ Fix all errors before publishing.
 ## Step 6: Publish to skills.sh
 
 1. Push skill folder to a GitHub repository
-2. Verify at: `https://skills.sh/<username>/<repo>/<skill-name>`
-3. skills.sh auto-indexes from your GitHub repo
-4. Users install with: `npx skills add https://github.com/<username>/<repo> --skill <skill-name>`
+2. Verify GitHub discovery first:
+   ```bash
+   npx skills add https://github.com/<username>/<repo> --list
+   bash scripts/verify_publish.sh https://github.com/<username>/<repo> <skill-name>
+   ```
+3. Use a real public install to seed `skills.sh` discovery:
+   ```bash
+   npx skills add https://github.com/<username>/<repo> --skill <skill-name>
+   ```
+4. Verify at: `https://skills.sh/<username>/<repo>/<skill-name>`
+
+Important:
+- `skills.sh` search and skill pages are driven by successful public installs through the `skills` CLI.
+- A GitHub push or `--list` check alone does NOT create a listing.
+- Local-path installs do NOT publish anything to `skills.sh`.
+- Search/page updates may lag after the first public install.
 
 **SEO tips for skills.sh discovery:**
 - Description keywords determine search ranking
@@ -259,3 +272,4 @@ Key takeaways:
 
 - `scripts/init_skill.sh <name> <path>` - Generate new skill folder structure
 - `scripts/validate_skill.sh <path>` - Validate skill before publishing
+- `scripts/verify_publish.sh <source> <skill-name>` - Verify CLI discovery and `skills.sh` listing state

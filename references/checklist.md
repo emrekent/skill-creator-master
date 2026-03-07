@@ -29,7 +29,7 @@ Run through this checklist before publishing any skill. Every item marked CRITIC
 ## 3. File Structure (CRITICAL)
 
 - [ ] SKILL.md exists at root of skill folder
-- [ ] No forbidden files: README.md, INSTALLATION.md, CHANGELOG.md, LICENSE.md, TESTING.md, QUICK_REFERENCE.md
+- [ ] Auxiliary files reviewed: README.md, INSTALLATION.md, CHANGELOG.md, LICENSE.md, TESTING.md, QUICK_REFERENCE.md
 - [ ] No .DS_Store files
 - [ ] Clean directory: only SKILL.md + scripts/ + references/ + assets/
 
@@ -67,12 +67,16 @@ Run through this checklist before publishing any skill. Every item marked CRITIC
 - [ ] Description is comprehensive but not bloated
 - [ ] Keywords match actual use cases
 
-## 8. GitHub Setup (IMPORTANT)
+## 8. GitHub + skills.sh Setup (IMPORTANT)
 
 - [ ] Repository is public
 - [ ] .gitignore excludes .DS_Store, node_modules, etc.
 - [ ] Clean commit history
 - [ ] Discussions enabled (optional but recommended)
+- [ ] `npx skills add https://github.com/<user>/<repo> --list` finds the skill from GitHub
+- [ ] `bash scripts/verify_publish.sh https://github.com/<user>/<repo> <skill-name>` passes with zero FAIL
+- [ ] First public install completed if you expect a live `skills.sh` listing immediately
+- [ ] Verified `https://skills.sh/<user>/<repo>/<skill-name>` after install telemetry has had time to index
 
 ## 9. Final Validation
 
@@ -95,5 +99,5 @@ bash scripts/validate_skill.sh <path/to/skill-folder>
 | Scripts | 7 | CRITICAL (if applicable) |
 | Content Quality | 6 | IMPORTANT |
 | SEO / Discovery | 4 | IMPORTANT |
-| GitHub Setup | 4 | IMPORTANT |
+| GitHub + skills.sh Setup | 8 | IMPORTANT |
 | Final Validation | 2 | CRITICAL |

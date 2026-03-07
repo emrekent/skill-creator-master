@@ -93,7 +93,7 @@ The difference between a 3-star skill and a 5-star skill is user feedback.
 
 1. **GitHub Discussions.** Enable on your repo. Zero friction. Direct feedback.
 2. **First-week usage.** Watch how people actually use your skill. Adjust triggers.
-3. **Iterate fast.** Update SKILL.md, push to GitHub, skills.sh reflects changes automatically.
+3. **Iterate fast, but verify the right thing.** Update SKILL.md, push to GitHub, then verify GitHub discovery with the `skills` CLI. `skills.sh` listing/search updates depend on successful public installs and can lag.
 
 ### Real Feedback That Changed translator-ai
 
@@ -139,7 +139,14 @@ Low impact: File count + repo size
 - Issues for bug reports
 - Stars for social proof
 - Insights for traffic analytics (repo → Insights → Traffic)
-- Automatic indexing by skills.sh
+- Public source that the `skills` CLI can install from
+
+### What Actually Makes a Skill Appear on skills.sh
+
+- A public GitHub repo is necessary, but not sufficient
+- `npx skills add <repo> --list` proves the repo is discoverable
+- A successful public install through `npx skills add <repo> --skill <skill-name>` creates the telemetry that feeds `skills.sh`
+- Local-path installs and `--list` checks do not create a public listing
 
 ### Setup Checklist
 
