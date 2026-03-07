@@ -136,19 +136,19 @@ else
 fi
 
 # ─────────────────────────────────────
-# CHECK 5: Forbidden Files
+# CHECK 5: Auxiliary Files
 # ─────────────────────────────────────
-echo "5. Forbidden Files"
+echo "5. Auxiliary Files"
 FORBIDDEN_FILES=("README.md" "INSTALLATION.md" "CHANGELOG.md" "QUICK_REFERENCE.md" "TESTING.md" "LICENSE.md" "COMPREHENSIVE_TEST_SUITE.md")
 FOUND_FORBIDDEN=0
 for file in "${FORBIDDEN_FILES[@]}"; do
   if [ -f "$SKILL_DIR/$file" ]; then
-    fail "Forbidden file found: $file (skills should only contain SKILL.md + resources)"
+    warn "Auxiliary file found: $file (not a publish blocker, but it adds non-skill repo clutter)"
     ((FOUND_FORBIDDEN++))
   fi
 done
 if [ $FOUND_FORBIDDEN -eq 0 ]; then
-  pass "No forbidden auxiliary files"
+  pass "No auxiliary files detected"
 fi
 
 # ─────────────────────────────────────
@@ -214,12 +214,17 @@ echo -e "${YELLOW}  WARNINGS: $WARNINGS${NC}"
 echo ""
 
 if [ $FAILED -eq 0 ]; then
+  PUBLISH_NAME="$SKILL_NAME"
+  if [ -n "$NAME_VALUE" ]; then
+    PUBLISH_NAME="$NAME_VALUE"
+  fi
   echo -e "${GREEN}RESULT: READY TO PUBLISH${NC}"
   echo ""
   echo "Next steps:"
   echo "  1. Push to GitHub"
-  echo "  2. Verify at: https://skills.sh/<username>/<repo>/$SKILL_NAME"
-  echo "  3. Users install: npx skills add https://github.com/<username>/<repo> --skill $SKILL_NAME"
+  echo "  2. Verify GitHub discovery: npx skills add https://github.com/<username>/<repo> --list"
+  echo "  3. Check publish state: bash scripts/verify_publish.sh https://github.com/<username>/<repo> $PUBLISH_NAME"
+  echo "  4. Users install: npx skills add https://github.com/<username>/<repo> --skill $PUBLISH_NAME"
   exit 0
 else
   echo -e "${RED}RESULT: FIX $FAILED ERROR(S) BEFORE PUBLISHING${NC}"

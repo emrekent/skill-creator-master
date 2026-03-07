@@ -21,8 +21,8 @@ When you say **"Create a new skill"** or **"Help me build a skill"**, this skill
 2. PLAN       → Identify scripts, references, assets needed
 3. INIT       → Generate skill folder structure (automated)
 4. BUILD      → Write SKILL.md + bundled resources
-5. VALIDATE   → Run 13-check validation suite (automated)
-6. PUBLISH    → Push to GitHub → live on skills.sh
+5. VALIDATE   → Run validation suite (automated)
+6. PUBLISH    → Push to GitHub → verify discovery → first public install → live on skills.sh
 ```
 
 ---
@@ -31,10 +31,11 @@ When you say **"Create a new skill"** or **"Help me build a skill"**, this skill
 
 ```
 skill-creator-master/
-├── SKILL.md                    Core skill (261 lines, under 500 limit)
+├── SKILL.md                    Core skill guide (under 500 lines)
 ├── scripts/
 │   ├── init_skill.sh           Generates new skill folders automatically
-│   └── validate_skill.sh       13-check validation before publishing
+│   ├── validate_skill.sh       Validation before publishing
+│   └── verify_publish.sh       Checks CLI discovery and skills.sh listing state
 └── references/
     ├── structure-guide.md      Skill anatomy, YAML rules, file organization
     ├── lessons-learned.md      Real-world case study from translator-ai
@@ -60,14 +61,40 @@ Creates a complete skill folder with SKILL.md template, scripts/, references/, a
 bash scripts/validate_skill.sh <path/to/skill-folder>
 ```
 
-Runs 13 automated checks:
+Runs automated checks for:
 - YAML frontmatter validation (name, description)
 - SKILL.md line count (must be under 500)
 - Placeholder detection
-- Forbidden file detection (no README, CHANGELOG inside skills)
+- Auxiliary file detection (warns about extra repo docs)
 - Phantom reference detection
 - Script executability
 - Naming consistency
+
+### Publish Verification Script — Check Real Listing Status
+
+```bash
+bash scripts/verify_publish.sh https://github.com/<username>/<repo> <skill-name>
+```
+
+Checks:
+- The upstream `skills` CLI can discover the repo from GitHub
+- The specific skill name is visible to the CLI
+- The `skills.sh` search API contains the skill
+- The `skills.sh/<owner>/<repo>/<skill>` page resolves
+
+If the page is still missing, the script explains the usual reason: `skills.sh` listing is driven by successful public installs through the `skills` CLI, not by a GitHub push alone.
+
+## How skills.sh Publishing Actually Works
+
+1. Push the skill to a public GitHub repository.
+2. Verify discoverability with `npx skills add <repo> --list`.
+3. Perform at least one real public install with `npx skills add <repo> --skill <skill-name>`.
+4. Re-check `https://skills.sh/<owner>/<repo>/<skill-name>`.
+
+Important:
+- `--list` verifies structure and frontmatter, but it does not publish.
+- Local-path installs do not create `skills.sh` listings.
+- `skills.sh` search and page generation are driven by anonymous install telemetry from the `skills` CLI, so indexing can lag after the first public install.
 
 ---
 
